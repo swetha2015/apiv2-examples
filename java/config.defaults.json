@@ -1,0 +1,6 @@
+{
+    "api_url": "https://my.scalr.com",
+    "api_key_id": "xxxxxxxxxxxxxxxxxx",
+    "api_key_secret": "yyyyyyyyyyyyyyyyyyyyyyyy",
+    "env_id": "12345"
+}
