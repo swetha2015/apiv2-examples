@@ -2,18 +2,14 @@
 
 class ScalrAPI
 {
-	function __construct()
+	function __construct($url, $key_id, $key_secret)
 	{
 		//Contains last errors
 		$this->errors = '';
-	
-		//Read config
-		$creds = @file_get_contents('config.json');
-		if (!$creds) die('config.json file is missing.');
 		
-		$this->config = json_decode($creds);
-		
-		print_r($this->config);
+		$this->api_url = $url;
+		$this->api_key_id = $key_id;
+		$this->api_key_secret = $key_secret;
 	}
 
 	//Makes the raw request to the API
@@ -54,11 +50,11 @@ class ScalrAPI
 		);
 		
 		//Calculate signature based on request data
-		$signature = 'V1-HMAC-SHA256 ' . base64_encode(hash_hmac('sha256', implode("\n", $request), $this->config->api_key_secret, true));
+		$signature = 'V1-HMAC-SHA256 ' . base64_encode(hash_hmac('sha256', implode("\n", $request), $this->api_key_secret, true));
 				
 		//HTTP request headers
 		$headers = array();
-		$headers[] = "X-Scalr-Key-Id: {$this->config->api_key_id}";
+		$headers[] = "X-Scalr-Key-Id: {$this->api_key_id}";
 		$headers[] = "X-Scalr-Signature: $signature";
 		$headers[] = "X-Scalr-Date: $time";
 		$headers[] = 'Content-Type: application/json';
@@ -68,7 +64,7 @@ class ScalrAPI
 		
 		//Make HTTP request to API
 		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, "{$this->config->api_url}$uri?$query");
+		curl_setopt($ch, CURLOPT_URL, "{$this->api_url}$uri?$query");
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
