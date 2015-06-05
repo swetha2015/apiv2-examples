@@ -57,10 +57,8 @@ class ScalrAPI
 		$headers[] = "X-Scalr-Key-Id: {$this->api_key_id}";
 		$headers[] = "X-Scalr-Signature: $signature";
 		$headers[] = "X-Scalr-Date: $time";
-		$headers[] = 'Content-Type: application/json';
 		
-		//print_r($request);
-		//print_r($headers);
+		if ($body) $headers[] = 'Content-Type: application/json';
 		
 		//Make HTTP request to API
 		$ch = curl_init();
@@ -97,8 +95,6 @@ class ScalrAPI
 		while ($url)
 		{
 			$response = $this->request('GET', $url);
-			if ($response === false) return false;
-			
 			$data = array_merge($data, $response->data);
 			$url = $response->pagination->next;
 		}
