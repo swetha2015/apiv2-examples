@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<project name="examples" basedir="." default="execute">
+
+	<property name="src" value="."/>
+	<property name="output" value="build"/>
+	<property name="lib" value="lib"/>
+
+	<target name="execute" depends="compile">
+		<echo>
+			Executing Scalr API Example.
+		</echo>
+		<java classname="examples">
+			<classpath refid="java"/>
+		</java>
+	</target>
+
+	<target name="compile" depends="create">
+		<echo>
+			Compiling source files.
+		</echo>
+		<javac includeantruntime="false" destdir="${output}">
+			<src path="${src}"/>
+			<classpath refid="java"/>
+		</javac>
+	</target>
+
+	<target name="clean">
+		<echo>
+			Deleting old class files.
+		</echo>
+		<delete dir="${output}"/>
+		<delete dir="${lib}"/>
+	</target>
+
+	<target name="create" depends="clean">
+		<echo>
+			Creating output directory.
+		</echo>
+		<mkdir dir="${output}"/>
+		<mkdir dir="${lib}"/>
+
+		<get dest="${lib}">
+			<url url="http://json-simple.googlecode.com/files/json-simple-1.1.1.jar"/> 
+		</get>
+
+	</target>
+
+	<path id="java">
+		<pathelement location="${output}"/>
+		<fileset dir="${lib}">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+
+</project>

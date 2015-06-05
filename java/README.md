@@ -5,9 +5,9 @@ mv config.defaults.json config.json
 
 2. Update config.json with your API credentials
 
-3. Run the example file
+3. Run Java Ant to build the project (from the root of the project that contains the build.xml file)
 ```
-java examples.java
+ant
 ```
 
 Inside the examples.java file, you will see some different examples that are commented out by default.
