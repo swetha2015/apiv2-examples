@@ -4,6 +4,7 @@
 	<property name="src" value="."/>
 	<property name="output" value="build"/>
 	<property name="lib" value="lib"/>
+	<property name="project-name" value="examples"/>
 
 	<target name="execute" depends="compile">
 		<echo>
@@ -18,7 +19,7 @@
 		<echo>
 			Compiling source files.
 		</echo>
-		<javac includeantruntime="false" destdir="${output}">
+		<javac includeantruntime="true" destdir="${output}">
 			<src path="${src}"/>
 			<classpath refid="java"/>
 		</javac>

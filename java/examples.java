@@ -1,12 +1,15 @@
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import com.scalr.*;
+import com.scalr.ScalrAPI;
 
 public class examples {
 
@@ -33,12 +36,11 @@ public class examples {
 			e.printStackTrace();
 		}
 
-		client scalr = new client(api_url, api_key_id, api_key_secret);
+		ScalrAPI scalr = new ScalrAPI(api_url, api_key_id, api_key_secret);
 
 		JSONArray list = null;
 		JSONObject item = null;
 
-		//List all operating systems
 		try {
 			list = scalr.list("/api/user/v1beta0/os/?family=ubuntu");
 
@@ -55,6 +57,22 @@ public class examples {
 		}
 
 		/*
+
+		//List all operating systems
+		try {
+			list = scalr.list("/api/user/v1beta0/os/?family=ubuntu");
+
+			for (int i=0; i < list.size(); i++) {
+				item = (JSONObject) list.get(i);
+
+				System.out.println(item);
+				System.out.println(item.get("id"));
+				System.out.println(item.get("name"));
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		//List all operating systems
 		try {
@@ -169,16 +187,18 @@ public class examples {
 
 		//Create image
 		try {
-			item = scalr.create(String.format("/api/user/v1beta0/%s/images/", env_id), "{" +
-				"|name|: |api-test-image-trusty-1|," +
-				"|cloudImageId|: |ami-10b68a78|," +
-				"|cloudPlatform|: |ec2|," +
-				"|cloudLocation|: |us-east-1|," +
-				"|architecture|: |x86_64|," +
-				"|os|: {" +
-					"|id|: |ubuntu-14-04|" +
-				"}" +
-			"}".replace("|", "\""));
+			Map os = new LinkedHashMap();
+			os.put("id", "ubuntu-14-04");
+
+			Map post = new LinkedHashMap();
+			post.put("name","api-test-image-trusty-1");
+			post.put("cloudImageId", "ami-10b68a78");
+			post.put("cloudPlatform", "ec2");
+			post.put("cloudLocation", "us-east-1");
+			post.put("architecture", "x86_64");
+			post.put("os", os);
+
+			item = scalr.create(String.format("/api/user/v1beta0/%s/images/", env_id), JSONValue.toJSONString(post));
 
 			System.out.println(item);
 			System.out.println(item.get("id"));
@@ -190,15 +210,18 @@ public class examples {
 
 		//Create role
 		try {
-			item = scalr.create(String.format("/api/user/v1beta0/%s/roles/", env_id), "{" +
-				"|name|: |api-test-role|," +
-				"|category|: {" +
-					"|id|: 1" +
-				"}," +
-				"|os|: {" +
-					"|id|: |ubuntu-14-04|" +
-				"}" +
-			"}".replace("|", "\""));
+			Map cat = new LinkedHashMap();
+			cat.put("id", 1);
+
+			Map os = new LinkedHashMap();
+			os.put("id", "ubuntu-14-04");
+
+			Map post = new LinkedHashMap();
+			post.put("name", "api-test-role");
+			post.put("category", cat);
+			post.put("os", os);
+			
+			item = scalr.create(String.format("/api/user/v1beta0/%s/roles/", env_id), JSONValue.toJSONString(post));
 
 			System.out.println(item);
 
@@ -208,9 +231,10 @@ public class examples {
 
 		//Connect image to role
 		try {
-			item = scalr.create(String.format("/api/user/v1beta0/%s/roles/%s/images/", env_id, "76131"), "{" +
-				"|image|: |646539df-0ed0-b0db-c278-1f3c2e7183d6|" +
-			"}".replace("|", "\""));
+			Map post = new LinkedHashMap();
+			post.put("image", "646539df-0ed0-b0db-c278-1f3c2e7183d6");
+			
+			item = scalr.create(String.format("/api/user/v1beta0/%s/roles/%s/images/", env_id, "76131"), JSONValue.toJSONString(post));
 
 			System.out.println(item);
 
@@ -220,9 +244,10 @@ public class examples {
 
 		//Replace image in role
 		try {
-			item = scalr.post(String.format("/api/user/v1beta0/%s/roles/%s/images/%s/actions/replace/", env_id, "76131", "646539df-0ed0-b0db-c278-1f3c2e7183d6"), "{" +
-				"|image|: |6b901494-a7da-8946-1722-8bd25ac75283|" +
-			"}".replace("|", "\""));
+			Map post = new LinkedHashMap();
+			post.put("image", "6b901494-a7da-8946-1722-8bd25ac75283");
+		
+			item = scalr.post(String.format("/api/user/v1beta0/%s/roles/%s/images/%s/actions/replace/", env_id, "76131", "646539df-0ed0-b0db-c278-1f3c2e7183d6"), JSONValue.toJSONString(post));
 
 			System.out.println(item);
 
