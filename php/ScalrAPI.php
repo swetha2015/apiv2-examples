@@ -75,9 +75,13 @@ class ScalrAPI
 
 		curl_close($ch);
 		
-		if ($status != 200) throw new Exception("Error$status", $status);
-		
 		$response = json_decode($response);
+
+		if ($status != 200) 
+		{
+			$this->errors = $response->errors;
+			throw new Exception("Error$status", $status);
+		}
 		
 		if (isset($response->errors)) 
 		{
