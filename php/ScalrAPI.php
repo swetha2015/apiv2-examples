@@ -77,7 +77,7 @@ class ScalrAPI
 		
 		$response = json_decode($response);
 
-		if ($status != 200) 
+		if ($status >= 400) 
 		{
 			$this->errors = $response->errors;
 			throw new Exception("Error$status", $status);
