@@ -129,9 +129,9 @@ class ScalrAPI
 	}
 	
 	//Edit items in API
-	public function post($url, $data)
+	public function edit($url, $data)
 	{
-		$response = $this->request('POST', $url, $data);
+		$response = $this->request('PATCH', $url, $data);
 		return $response->data;
 	}
 	
