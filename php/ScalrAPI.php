@@ -74,10 +74,10 @@ class ScalrAPI
 		$status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
 		curl_close($ch);
-		
+
 		$response = json_decode($response);
 
-		if ($status >= 400) 
+		if ($status >= 400 || $status == 0) 
 		{
 			$this->errors = $response->errors;
 			throw new Exception("Error$status", $status);
