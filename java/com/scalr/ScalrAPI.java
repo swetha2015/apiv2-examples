@@ -17,13 +17,13 @@ import javax.crypto.spec.SecretKeySpec;
 import org.json.simple.*;
 import org.json.simple.parser.*;
 
-public class client {
+public class ScalrAPI {
 
 	private String api_url;
 	private String api_key_id;
 	private String api_key_secret;
 
-	public client(String url, String key_id, String key_secret) {
+	public ScalrAPI(String url, String key_id, String key_secret) {
 		this.api_url = url;
 		this.api_key_id = key_id;
 		this.api_key_secret = key_secret;		
