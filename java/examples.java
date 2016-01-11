@@ -42,7 +42,7 @@ public class examples {
 		JSONObject item = null;
 
 		try {
-			list = scalr.list("/api/user/v1beta0/os/?family=ubuntu");
+			list = scalr.list("/api/v1beta0/account/os/?family=ubuntu");
 
 			for (int i=0; i < list.size(); i++) {
 				item = (JSONObject) list.get(i);
@@ -60,7 +60,7 @@ public class examples {
 
 		//List all operating systems
 		try {
-			list = scalr.list("/api/user/v1beta0/os/?family=ubuntu");
+			list = scalr.list("/api/v1beta0/account/os/?family=ubuntu");
 
 			for (int i=0; i < list.size(); i++) {
 				item = (JSONObject) list.get(i);
@@ -76,7 +76,7 @@ public class examples {
 
 		//List all operating systems
 		try {
-			list = scalr.list("/api/user/v1beta0/os/?family=ubuntu");
+			list = scalr.list("/api/v1beta0/account/os/?family=ubuntu");
 
 			for (int i=0; i < list.size(); i++) {
 				item = (JSONObject) list.get(i);
@@ -92,7 +92,7 @@ public class examples {
 
 		//Fetch specific operating system
 		try {
-			item = scalr.fetch(String.format("/api/user/v1beta0/os/%s", "ubuntu-12-10"));
+			item = scalr.fetch(String.format("/api/v1beta0/user/os/%s", "ubuntu-12-10"));
 
 			System.out.println(item);
 			System.out.println(item.get("id"));
@@ -103,7 +103,7 @@ public class examples {
 
 		//List all role categories
 		try {
-			list = scalr.list(String.format("/api/user/v1beta0/%s/role-categories/", env_id));
+			list = scalr.list(String.format("/api/v1beta0/user/%s/role-categories/", env_id));
 
 			for (int i=0; i < list.size(); i++) {
 				item = (JSONObject) list.get(i);
@@ -119,7 +119,7 @@ public class examples {
 
 		//Fetch specific role category
 		try {
-			item = scalr.fetch(String.format("/api/user/v1beta0/%s/role-categories/%s", env_id, "3"));
+			item = scalr.fetch(String.format("/api/v1beta0/user/%s/role-categories/%s", env_id, "3"));
 
 			System.out.println(item);
 			System.out.println(item.get("id"));
@@ -131,7 +131,7 @@ public class examples {
 
 		//List all roles
 		try {
-			list = scalr.list(String.format("/api/user/v1beta0/%s/roles/", env_id));
+			list = scalr.list(String.format("/api/v1beta0/user/%s/roles/", env_id));
 
 			for (int i=0; i < list.size(); i++) {
 				item = (JSONObject) list.get(i);
@@ -147,7 +147,7 @@ public class examples {
 
 		//Fetch specific role
 		try {
-			item = scalr.fetch(String.format("/api/user/v1beta0/%s/roles/%s", env_id, 76131));
+			item = scalr.fetch(String.format("/api/v1beta0/user/%s/roles/%s", env_id, 76131));
 
 			System.out.println(item);
 			System.out.println(item.get("id"));
@@ -159,7 +159,7 @@ public class examples {
 
 		//List all images
 		try {
-			list = scalr.list(String.format("/api/user/v1beta0/%s/images/", env_id));
+			list = scalr.list(String.format("/api/v1beta0/user/%s/images/", env_id));
 
 			for (int i=0; i < list.size(); i++) {
 				item = (JSONObject) list.get(i);
@@ -175,7 +175,7 @@ public class examples {
 
 		//Fetch specific image
 		try {
-			item = scalr.fetch(String.format("/api/user/v1beta0/%s/images/%s", env_id, "6b901494-a7da-8946-1722-8bd25ac75283"));
+			item = scalr.fetch(String.format("/api/v1beta0/user/%s/images/%s", env_id, "6b901494-a7da-8946-1722-8bd25ac75283"));
 
 			System.out.println(item);
 			System.out.println(item.get("id"));
@@ -198,7 +198,7 @@ public class examples {
 			post.put("architecture", "x86_64");
 			post.put("os", os);
 
-			item = scalr.create(String.format("/api/user/v1beta0/%s/images/", env_id), JSONValue.toJSONString(post));
+			item = scalr.create(String.format("/api/v1beta0/user/%s/images/", env_id), JSONValue.toJSONString(post));
 
 			System.out.println(item);
 			System.out.println(item.get("id"));
@@ -221,7 +221,7 @@ public class examples {
 			post.put("category", cat);
 			post.put("os", os);
 			
-			item = scalr.create(String.format("/api/user/v1beta0/%s/roles/", env_id), JSONValue.toJSONString(post));
+			item = scalr.create(String.format("/api/v1beta0/user/%s/roles/", env_id), JSONValue.toJSONString(post));
 
 			System.out.println(item);
 
@@ -234,7 +234,7 @@ public class examples {
 			Map post = new LinkedHashMap();
 			post.put("image", "646539df-0ed0-b0db-c278-1f3c2e7183d6");
 			
-			item = scalr.create(String.format("/api/user/v1beta0/%s/roles/%s/images/", env_id, "76131"), JSONValue.toJSONString(post));
+			item = scalr.create(String.format("/api/v1beta0/user/%s/roles/%s/images/", env_id, "76131"), JSONValue.toJSONString(post));
 
 			System.out.println(item);
 
@@ -247,7 +247,7 @@ public class examples {
 			Map post = new LinkedHashMap();
 			post.put("image", "6b901494-a7da-8946-1722-8bd25ac75283");
 		
-			item = scalr.post(String.format("/api/user/v1beta0/%s/roles/%s/images/%s/actions/replace/", env_id, "76131", "646539df-0ed0-b0db-c278-1f3c2e7183d6"), JSONValue.toJSONString(post));
+			item = scalr.post(String.format("/api/v1beta0/user/%s/roles/%s/images/%s/actions/replace/", env_id, "76131", "646539df-0ed0-b0db-c278-1f3c2e7183d6"), JSONValue.toJSONString(post));
 
 			System.out.println(item);
 
@@ -257,7 +257,7 @@ public class examples {
 
 		//Delete image
 		try {
-			scalr.delete(String.format("/api/user/v1beta0/%s/images/%s/", env_id, "646539df-0ed0-b0db-c278-1f3c2e7183d6"));
+			scalr.delete(String.format("/api/v1beta0/user/%s/images/%s/", env_id, "646539df-0ed0-b0db-c278-1f3c2e7183d6"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -13,7 +13,7 @@ scalr = ScalrAPI.new(config['api_url'], config['api_key_id'], config['api_key_se
 
 #List all operating systems
 begin
-	list = scalr.list('/api/user/v1beta0/os/?family=ubuntu')
+	list = scalr.list('/api/v1beta0/account/os/?family=ubuntu')
 	
 	puts list
 rescue Exception => e  
@@ -26,7 +26,7 @@ end
 
 #List all operating systems
 begin
-	list = scalr.list('/api/user/v1beta0/os/?family=ubuntu')
+	list = scalr.list('/api/v1beta0/account/os/?family=ubuntu')
 	
 	puts list
 rescue Exception => e  
@@ -35,7 +35,7 @@ end
 
 #Fetch specific operating system
 begin
-	item = scalr.fetch('/api/user/v1beta0/os/%s' % ['ubuntu-10-10'])
+	item = scalr.fetch('/api/v1beta0/account/os/%s' % ['ubuntu-10-10'])
 	
 	puts item
 rescue Exception => e  
@@ -44,7 +44,7 @@ end
 
 #List role categories
 begin
-	list = scalr.list('/api/user/v1beta0/%s/role-categories/' % [config['env_id']])
+	list = scalr.list('/api/v1beta0/user/%s/role-categories/' % [config['env_id']])
 	
 	puts list
 rescue Exception => e  
@@ -53,7 +53,7 @@ end
 
 #Fetch specific role category
 begin
-	item = scalr.fetch('/api/user/v1beta0/%s/role-categories/%s' % [config['env_id'], '8'])
+	item = scalr.fetch('/api/v1beta0/user/%s/role-categories/%s' % [config['env_id'], '8'])
 	
 	puts item
 rescue Exception => e  
@@ -62,7 +62,7 @@ end
 
 #List all roles
 begin
-	list = scalr.list('/api/user/v1beta0/%s/roles/' % [config['env_id']])
+	list = scalr.list('/api/v1beta0/user/%s/roles/' % [config['env_id']])
 	
 	puts list
 rescue Exception => e  
@@ -71,7 +71,7 @@ end
 
 #Fetch specific role
 begin
-	item = scalr.fetch('/api/user/v1beta0/%s/roles/%s' % [config['env_id'], '76131'])
+	item = scalr.fetch('/api/v1beta0/user/%s/roles/%s' % [config['env_id'], '76131'])
 	
 	puts item
 rescue Exception => e  
@@ -80,7 +80,7 @@ end
 
 #List all images
 begin
-	list = scalr.list('/api/user/v1beta0/%s/images/' % [config['env_id']])
+	list = scalr.list('/api/v1beta0/user/%s/images/' % [config['env_id']])
 	
 	puts list
 rescue Exception => e  
@@ -89,7 +89,7 @@ end
 
 #Fetch specific image
 begin
-	item = scalr.fetch('/api/user/v1beta0/%s/images/%s' % [config['env_id'], '6b901494-a7da-8946-1722-8bd25ac75283'])
+	item = scalr.fetch('/api/v1beta0/user/%s/images/%s' % [config['env_id'], '6b901494-a7da-8946-1722-8bd25ac75283'])
 	
 	puts item
 rescue Exception => e  
@@ -98,7 +98,7 @@ end
 
 #Create image
 begin
-	item = scalr.create('/api/user/v1beta0/%s/images/' % [config['env_id']], {
+	item = scalr.create('/api/v1beta0/user/%s/images/' % [config['env_id']], {
 		'name' => 'api-test-image-trusty-1',
 		'cloudImageId' => 'ami-10b68a78',
 		'cloudPlatform' => 'ec2',
@@ -116,7 +116,7 @@ end
 
 #Create role
 begin
-	item = scalr.create('/api/user/v1beta0/%s/roles/' % [config['env_id']], {
+	item = scalr.create('/api/v1beta0/user/%s/roles/' % [config['env_id']], {
 		'name' => 'api-test-role',
 		'category' => {
 			'id' => 1
@@ -133,7 +133,7 @@ end
 
 #Connect image to role
 begin
-	item = scalr.create('/api/user/v1beta0/%s/roles/%s/images/' % [config['env_id'], '76131'], {
+	item = scalr.create('/api/v1beta0/user/%s/roles/%s/images/' % [config['env_id'], '76131'], {
 		'image' => '646539df-0ed0-b0db-c278-1f3c2e7183d6'
 	})
 	
@@ -144,7 +144,7 @@ end
 
 #Replace image in role
 begin
-	item = scalr.post('/api/user/v1beta0/%s/roles/%s/images/%s/actions/replace/' % [config['env_id'], '76131', '646539df-0ed0-b0db-c278-1f3c2e7183d6'], {
+	item = scalr.post('/api/v1beta0/user/%s/roles/%s/images/%s/actions/replace/' % [config['env_id'], '76131', '646539df-0ed0-b0db-c278-1f3c2e7183d6'], {
 		'image' => '6b901494-a7da-8946-1722-8bd25ac75283'
 	})
 	
@@ -155,7 +155,7 @@ end
 
 #Delete image
 begin
-	item = scalr.delete('/api/user/v1beta0/%s/images/%s/' % [config['env_id'], '646539df-0ed0-b0db-c278-1f3c2e7183d6'])
+	item = scalr.delete('/api/v1beta0/user/%s/images/%s/' % [config['env_id'], '646539df-0ed0-b0db-c278-1f3c2e7183d6'])
 	
 	puts item
 rescue Exception => e  
