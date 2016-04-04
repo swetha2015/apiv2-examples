@@ -4,14 +4,19 @@ Scalr APIv2 Ruby sample
 Usage
 -----
 
-1. Rename config file
+1. Install required gems
+```
+sudo gem install rest-client
+```
+
+2. Rename config file
 ```
 mv config.defaults.json config.json
 ```
 
-2. Update config.json with your API credentials
+3. Update config.json with your API credentials
 
-3. Run the example file
+4. Run the example file
 ```
 ruby examples.rb
 ```
