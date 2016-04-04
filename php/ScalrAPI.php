@@ -10,6 +10,8 @@ class ScalrAPI
 		$this->api_url = $url;
 		$this->api_key_id = $key_id;
 		$this->api_key_secret = $key_secret;
+
+		date_default_timezone_set('UTC');
 	}
 
 	//Makes the raw request to the API
