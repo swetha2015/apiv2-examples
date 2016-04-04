@@ -1,3 +1,9 @@
+Scalr APIv2 PHP sample
+======================
+
+Usage
+-----
+
 1. Rename config file
 ```
 mv config.defaults.json config.json
