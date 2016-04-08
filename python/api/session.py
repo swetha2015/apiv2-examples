@@ -43,15 +43,10 @@ class ScalrApiSession(requests.Session):
             request.body if request.body is not None else ""
         ])
 
-        sts = "GET\n2016-04-04T13:19:24.477Z\n/api/v1beta0/user/3/farms/\n\n"
-
         sig = " ".join([
             "V1-HMAC-SHA256",
             base64.b64encode(hmac.new(str(self.client.key_secret), sts, hashlib.sha256).digest())
         ])
-
-        print(sts, str(self.client.key_secret))
-        print(sig)
 
         request.headers.update({
             "X-Scalr-Key-Id": self.client.key_id,
