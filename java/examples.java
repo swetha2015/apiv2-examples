@@ -41,9 +41,13 @@ public class examples {
 		JSONArray list = null;
 		JSONObject item = null;
 
-		try {
-			list = scalr.list("/api/v1beta0/account/os/?family=ubuntu");
+		String url = "/api/v1beta0/account/os/?family=ubuntu";
 
+		try {
+			System.out.println("Accessing: " + url);
+			list = scalr.list(url);
+
+			System.out.println("Results:");
 			for (int i=0; i < list.size(); i++) {
 				item = (JSONObject) list.get(i);
 
@@ -53,6 +57,7 @@ public class examples {
 			}
 
 		} catch (Exception e) {
+			System.out.println("Error executing request");
 			e.printStackTrace();
 		}
 

@@ -143,3 +143,5 @@ Session.vim
 ### Project ###
 *-creds.json
 creds.json
+config.json
+

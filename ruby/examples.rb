@@ -13,10 +13,13 @@ scalr = ScalrAPI.new(config['api_url'], config['api_key_id'], config['api_key_se
 
 #List all operating systems
 begin
+	url = '/api/v1beta0/account/os/?family=ubuntu'
+	puts 'Accessing' + url
 	list = scalr.list('/api/v1beta0/account/os/?family=ubuntu')
-	
+	puts 'Results:'
 	puts list
 rescue Exception => e  
+	puts 'Error accessing API'
 	puts e.response
 end
 
