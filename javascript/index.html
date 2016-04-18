@@ -1,0 +1,116 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Scalr API Example</title>
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+  <link type="image/x-icon" href="static/favicon.ico" rel="shortcut icon" />
+  <style>
+    .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+    .nav.nav-tabs { padding-bottom: 15px; }
+  </style>
+</head>
+
+<body ng-app="ScalrAPIExample">
+  <div class="container">
+    <div class="page-header">
+      <h1>Scalr API Example</h1>
+      <p>This app allows you to try and send requests to the Scalr API.</p>
+      <p>This app is exclusively client-side. All requests are directly sent from your workstation to the Scalr API.</p>
+    </div>
+
+    <div class="container" ng-controller="APIRequestForm">
+        <div class="row">
+
+          <h2>API Settings</h2>
+
+          <div class="alert alert-warning" role="alert" ng-show="isHttps && apiSettingsForm.apiUrl.$valid && apiSettings.apiUrl.indexOf('https') != 0">
+            <p>
+              <strong><span class="glyphicon glyphicon-warning-sign"></span> Heads up!</strong>
+              You are currently accessing the API Explorer over HTTPS, but your API endpoint is served over HTTP.
+              This may trigger a <a href="https://developer.mozilla.org/en-US/docs/Security/MixedContent">mixed content alert</a> in your browser.
+            </p>
+            <p>
+              <strong>Don't panic, the API Explorer can still work,</strong> provided you allow mixed content first.
+            </p>
+            <p>
+              To do so, make a "Hello" API Call. Your browser will show a warning; it's a shield icon next to the URL bar.
+              Click it, and allow mixed content. Most browsers will reload the page, so make sure you save your API settings first.
+            </p>
+
+          </div>
+
+          <form name="apiSettingsForm" class="form-horizontal" role="form" novalidate>
+            <div class="form-group" ng-class="{'has-error': apiSettingsForm.apiUrl.$invalid}">
+              <label class="col-sm-2 control-label">API URL</label>
+              <div class="col-sm-10">
+                <input class="form-control" type="url" name="apiUrl" ng-model="apiSettings.apiUrl" ng-required="true" />
+              </div>
+            </div>
+
+            <div class="form-group" ng-class="{'has-error': apiSettingsForm.keyId.$invalid}">
+              <label class="col-sm-2 control-label">API Key ID</label>
+              <div class="col-sm-10">
+                <input class="form-control" type="text" name="keyId" ng-model="apiSettings.keyId" ng-required="equals(apiSettings.authType, 'key')" />
+              </div>
+            </div>
+
+            <div  class="form-group">
+              <label class="col-sm-2 control-label">API Secret Key</label>
+              <div class="col-sm-10" ng-class="{'has-error': apiSettingsForm.secretKey.$invalid}">
+                <input class="form-control" type="password" name="secretKey" ng-model="apiSettings.secretKey" ng-required="equals(apiSettings.authType, 'key')" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-10">
+                <!-- TODO: Actually check API settings against what is saved! -->
+                <button class="btn btn-default" ng-disabled="equals(storedApiSettings, apiSettings)" ng-click="saveApiSettings()">Locally Save API Settings</button>
+                <button class="btn btn-danger" ng-disabled="equals(storedApiSettings, defaultApiSettings)" ng-click="clearApiSettings()">Clear Saved API Settings</button>
+              </div>
+            </div>
+          </form>
+
+        </div>
+
+        <div class="row">
+          <h2>Example 1: List Farms in an Environment</h2>
+          <form name="callForm1" class="form-horizontal">
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Environment ID:</label>
+              <div class="col-sm-10">
+                <input class="form-control" type="text" name="envID" ng-model="params1.envID" ng-required="true"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-10">
+                <!-- TODO: Actually check API settings against what is saved! -->
+                <button class="btn btn-success" ng-click="listFarms()">Fetch Farms list</button>
+              </div>
+            </div>
+          </form>
+          <div class="col-sm-offset-2 col-sm-10">
+            <h3>Results</h3>
+            <p><strong>HTTP Status:</strong> {{ result1.statusCode }} {{ result1.statusText }}</p>
+            <p><strong>Response data:</strong><br/>
+              <pre><code>{{ result1.body }}</code></pre>
+            </p>
+          </div>
+        </div>
+
+    </div>
+  </div>
+
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script>
+  <script src="static/angular-local-storage.min.js"></script>
+  <script src="static/ui-bootstrap-tpls-0.11.0.min.js"></script>
+  <script src="static/hmac-sha256.js"></script>
+  <script src="static/enc-base64-min.js"></script>
+  <script src="static/vkbeautify.js"></script>
+
+  <script src="app.js"></script>
+
+</body>
+</html>
