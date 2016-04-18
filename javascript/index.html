@@ -1,9 +1,9 @@
-
 <!doctype html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Scalr API Example</title>
   <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
   <link type="image/x-icon" href="static/favicon.ico" rel="shortcut icon" />
@@ -75,31 +75,90 @@
 
         </div>
 
-        <div class="row">
-          <h2>Example 1: List Farms in an Environment</h2>
-          <form name="callForm1" class="form-horizontal">
-            <div class="form-group">
-              <label class="col-sm-2 control-label">Environment ID:</label>
-              <div class="col-sm-10">
-                <input class="form-control" type="text" name="envID" ng-model="params1.envID" ng-required="true"/>
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="col-sm-offset-2 col-sm-10">
-                <!-- TODO: Actually check API settings against what is saved! -->
-                <button class="btn btn-success" ng-click="listFarms()">Fetch Farms list</button>
-              </div>
-            </div>
-          </form>
-          <div class="col-sm-offset-2 col-sm-10">
-            <h3>Results</h3>
-            <p><strong>HTTP Status:</strong> {{ result1.statusCode }} {{ result1.statusText }}</p>
-            <p><strong>Response data:</strong><br/>
-              <pre><code>{{ result1.body }}</code></pre>
-            </p>
-          </div>
-        </div>
+        <h2>Examples</h2>
 
+        <tabset justified="true">
+          <tab heading="1. List Farms">
+            <h3>Example 1: List Farms in an Environment</h3>
+            <form name="callForm1" class="form-horizontal">
+              <div class="form-group">
+                <label class="col-sm-2 control-label">Environment ID:</label>
+                <div class="col-sm-10">
+                  <input class="form-control" type="text" name="envID" ng-model="params1.envID" ng-required="true"/>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                  <button class="btn btn-success" ng-click="listFarms()">Fetch Farms list</button>
+                </div>
+              </div>
+            </form>
+            <div class="col-sm-10">
+              <h4>Results</h4>
+              <p><strong>HTTP Status:</strong> {{ result1.statusCode }} {{ result1.statusText }}</p>
+              <p><strong>Response data:</strong><br/>
+                <pre><code>{{ result1.body }}</code></pre>
+              </p>
+            </div>
+          </tab>
+
+          <tab heading="2. List Images with filters">
+            <h3>Example 2: List Images in an Environment, filtering on images properties</h3>
+            <form name="callForm2" class="form-horizontal">
+              <div class="form-group">
+                <label class="col-sm-2 control-label">Environment ID:</label>
+                <div class="col-sm-10">
+                  <input class="form-control" type="text" name="envID2" ng-model="params2.envID" ng-required="true"/>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">Filter by name:</label>
+                <div class="col-sm-10">
+                  <input class="form-control" type="text" name="imgname" ng-model="params2.name" ng-required="false"/>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">Filter by os:</label>
+                <div class="col-sm-10">
+                  <input class="form-control" type="text" name="imgos" ng-model="params2.os" ng-required="false"/>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">Filter by cloud platform:</label>
+                <div class="col-sm-10">
+                  <select class="form-control" type="text" name="imgos" ng-model="params2.cloudPlatform" ng-required="false">
+                    <option value="">any</option>
+                    <option value="ec2">ec2</option>
+                    <option value="gce">gce</option>
+                    <option value="azure">azure</option>
+                    <option value="cloudstack">cloudstack</option>
+                    <option value="idcf">idcf</option>
+                    <option value="openstack">openstack</option>
+                    <option value="ocs">ocs</option>
+                    <option value="rackspacenguk">rackspacenguk</option>
+                    <option value="rackspacengus">rackspacengus</option>
+                    <option value="hpcloud">hpcloud</option>
+                    <option value="vio">vio</option>
+                    <option value="mirantis">mirantis</option>
+                    <option value="cisco">cisco</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                  <button class="btn btn-success" ng-click="listImages()">Fetch Images list</button>
+                </div>
+              </div>
+            </form>
+            <div class="col-sm-offset-1 col-sm-10">
+              <h4>Results</h4>
+              <p><strong>HTTP Status:</strong> {{ result2.statusCode }} {{ result2.statusText }}</p>
+              <p><strong>Response data:</strong><br/>
+                <pre><code>{{ result2.body }}</code></pre>
+              </p>
+            </div>
+          </tab>
+        </tabset>
     </div>
   </div>
 
