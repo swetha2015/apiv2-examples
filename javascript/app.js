@@ -63,7 +63,8 @@ app.service('ScalrAPI', ['$http', function($http) {
     $http({
       'method' : method,
       'url' : scalrAddress + path + (queryString.length > 0 ? '?' + queryString : ''),
-      'headers' : headers
+      'headers' : headers,
+      'data': body
     }).then(onSuccess, onError);
   }
 
@@ -206,6 +207,228 @@ app.controller('APIRequestForm', ['ScalrAPI', '$scope', '$location', '$http', '$
         $scope.result2.statusText = response.statusText;
         $scope.result2.body = vkbeautify.json(response.data);
       });
+  }
+
+  //Example 3: create a farm
+  $scope.params3 = {
+    envID: '',
+    cleanup: true
+  };
+  $scope.result3 = '';
+
+  $scope.startCreateFarm = function() {
+    $scope.result3 = '';
+    $scope.ex3data = {};
+    if (!/^[0-9]+$/.test($scope.params3.envID)) {
+      $scope.result3 = 'Error: specify a valid environment ID.\nAn environment ID contains only numbers.';
+      return;
+    }
+    $scope.ex3data.envID = $scope.params3.envID;
+    $scope.ex3data.cleanup = !!$scope.params3.cleanup;
+    // Step 1: create image
+    var path = '/api/v1beta0/user/' + $scope.ex3data.envID + '/images/';
+    var body = JSON.stringify({
+      name: 'api-test-image-trusty-1',
+      cloudImageId: 'ami-10b68a78',
+      cloudPlatform: 'ec2',
+      cloudLocation: 'us-east-1',
+      architecture: 'x86_64',
+      os: {
+        id: 'ubuntu-14-04'
+      }
+    });
+    $scope.result3 += 'Creating image...\n';
+    $scope.result3 += 'Accessing: POST ' + path + '\n';
+    $scope.result3 += 'With body:\n' + vkbeautify.json(body) + '\n';
+
+    ScalrAPI.create(path, body, $scope.ex3CreateRole, $scope.ex3error);
+  }
+
+  $scope.ex3CreateRole = function(response) {
+    $scope.ex3data.imageID = response.data.data.id;
+    $scope.result3 += 'Success! Scalr image id: ' + $scope.ex3data.imageID + '\n';
+    
+    var path = '/api/v1beta0/user/' + $scope.ex3data.envID + '/roles/';
+    var body = JSON.stringify({
+      name: 'api-test-role',
+      category: {
+        id: 1
+      },
+      os: {
+        id: 'ubuntu-14-04'
+      },
+      'builtinAutomation': ['base']
+    });
+    $scope.result3 += 'Creating role...\n';
+    $scope.result3 += 'Accessing: POST ' + path + '\n';
+    $scope.result3 += 'With body:\n' + vkbeautify.json(body) + '\n';
+
+    ScalrAPI.create(path, body, $scope.ex3AddImageToRole, $scope.ex3error);
+  }
+
+  $scope.ex3AddImageToRole = function(response) {
+    $scope.ex3data.roleID = response.data.data.id;
+    $scope.result3 += 'Success! Role id: ' + $scope.ex3data.roleID + '\n';
+
+    var path = '/api/v1beta0/user/' + $scope.ex3data.envID + '/roles/' + $scope.ex3data.roleID + '/images/';
+    var body = JSON.stringify({
+      image: {
+        id: $scope.ex3data.imageID
+      }
+    });
+    $scope.result3 += 'Linking image to role...\n';
+    $scope.result3 += 'Accessing: POST ' + path + '\n';
+    $scope.result3 += 'With body:\n' + vkbeautify.json(body) + '\n';
+
+    ScalrAPI.create(path, body, $scope.ex3GetProjectId, $scope.ex3error);
+  }
+
+  $scope.ex3GetProjectId = function(response) {
+    $scope.ex3data.imageAssociatedToRole = true;
+    $scope.result3 += 'Success! \n';
+
+    var path = '/api/v1beta0/user/' + $scope.ex3data.envID + '/projects/';
+
+    $scope.result3 += 'Listing projects to get an usable project ID for the farm...\n';
+    $scope.result3 += 'Accessing: GET ' + path + '\n';
+
+    ScalrAPI.fetch(path, '', $scope.ex3CreateFarm, $scope.ex3error);
+  }
+
+  $scope.ex3CreateFarm = function(response) {
+    if (response.data.data.length < 1) {
+      $scope.result3 += 'Error: no projects are defined.\n'
+      if ($scope.ex3data.cleanup) {
+        $scope.ex3cleanup();
+      }
+      return;
+    }
+
+    $scope.ex3data.projectID = response.data.data[0].id;
+    $scope.result3 += 'Success! Project ID: ' + $scope.ex3data.projectID + '\n';
+    
+    var path = '/api/v1beta0/user/' + $scope.ex3data.envID + '/farms/';
+    var body = JSON.stringify({
+      name: 'API Test Farm',
+      project: {
+        id: $scope.ex3data.projectID
+      }
+    });
+
+    $scope.result3 += 'Creating farm...\n';
+    $scope.result3 += 'Accessing: POST ' + path + '\n';
+    $scope.result3 += 'With body:\n' + vkbeautify.json(body) + '\n';
+
+    ScalrAPI.create(path, body, $scope.ex3CreateFarmRole, $scope.ex3error);
+  }
+
+  $scope.ex3CreateFarmRole = function(response) {
+    $scope.ex3data.farmID = response.data.data.id;
+    $scope.result3 += 'Success! Farm id: ' + $scope.ex3data.farmID + '\n';
+
+    var path = '/api/v1beta0/user/' + $scope.ex3data.envID + '/farms/' + $scope.ex3data.farmID + '/farm-roles/';
+    var body = JSON.stringify({
+      alias: 'api-test-farm-role-1',
+      role: {
+        id: $scope.ex3data.roleID
+      },
+      platform: 'ec2',
+      placement: {
+        'region': 'us-east-1', 
+        'placementConfigurationType': 'AwsClassicPlacementConfiguration'
+      },
+      instance: {
+        'instanceConfigurationType': 'AwsInstanceConfiguration', 
+        'instanceType': {
+          'id': 'm1.small'
+        }
+      },
+      scaling: {
+        "minInstances": 1, 
+        "enabled": true, 
+        "maxInstances": 2
+      }
+    });
+
+
+    $scope.result3 += 'Creating farm role in the farm...\n';
+    $scope.result3 += 'Accessing: POST ' + path + '\n';
+    $scope.result3 += 'With body:\n' + vkbeautify.json(body) + '\n';
+
+    ScalrAPI.create(path, body, $scope.ex3allDone, $scope.ex3error);
+
+  }
+
+  $scope.ex3allDone = function(response) {
+    $scope.result3 += 'Farm role created.\nYou should now have a brand new functional farm in your account.\n';
+    if ($scope.ex3data.cleanup) {
+      $scope.ex3cleanup();
+    } else {
+      $scope.result3 += 'You have chosen not to clean up after this example. You should be able to launch the farm it created, but if you want to run it again, you need to manually remove the farm, the farm role and the image it created, or it will fail.\n';
+    }
+  }
+
+  $scope.ex3error = function(response) {
+    $scope.result3 += 'API call failed. Status Code: ' + response.status + ' ' + response.statusText + '\n';
+    $scope.result3 += 'Response body:\n' + vkbeautify.json(response.data) + '\n';
+    if ($scope.ex3data.cleanup) {
+      $scope.ex3cleanup();
+    }
+  }
+
+  $scope.ex3cleanup = function() {
+    $scope.ex3data.cleanup = false;  //Avoid triggering recursive cleanups in ex3error if an API call fails
+    $scope.result3 += 'Cleaning everything up... \n';
+
+    if ($scope.ex3data.farmID) {
+      $scope.ex3CleanupFarm();
+    }
+    else if ($scope.ex3data.imageAssociatedToRole) {
+      $scope.ex3RemoveImageFromRole();
+    }
+    else if ($scope.ex3data.roleID) {
+      $scope.ex3CleanupRole();
+    }
+    else if ($scope.ex3data.imageID) {
+      $scope.ex3CleanupImage();
+    }
+  }
+
+  $scope.ex3CleanupFarm = function() {
+    $scope.result3 += 'Removing farm... \n';
+    ScalrAPI.delete('/api/v1beta0/user/' + $scope.ex3data.envID + '/farms/' + $scope.ex3data.farmID + '/',
+      function(response) {
+        $scope.result3 += 'Farm deleted \n';
+        $scope.ex3RemoveImageFromRole();
+      }, $scope.ex3error);
+  }
+
+  $scope.ex3RemoveImageFromRole = function() {
+    $scope.result3 += 'Removing image from role... \n';
+    ScalrAPI.delete('/api/v1beta0/user/' + $scope.ex3data.envID + '/roles/' + $scope.ex3data.roleID + '/images/' + $scope.ex3data.imageID + '/',
+      function(response) {
+        $scope.result3 += 'Image removed from role \n';
+        $scope.ex3CleanupRole();
+      }, $scope.ex3error);
+  }
+
+  $scope.ex3CleanupRole = function() {
+    $scope.result3 += 'Removing role... \n';
+    ScalrAPI.delete('/api/v1beta0/user/' + $scope.ex3data.envID + '/roles/' + $scope.ex3data.roleID + '/',
+      function(response) {
+        $scope.result3 += 'Role removal done. \n';
+        $scope.ex3CleanupImage();
+      }, $scope.ex3error);
+  }
+
+  $scope.ex3CleanupImage = function() {
+    $scope.result3 += 'Removing image... \n';
+    ScalrAPI.delete('/api/v1beta0/user/' + $scope.ex3data.envID + '/images/' + $scope.ex3data.imageID + '/',
+      function(response) {
+        $scope.result3 += 'Image removal done. \n';
+        $scope.ex3data.cleanup = true;
+        $scope.result3 += 'Cleanup done. \n';
+      }, $scope.ex3error);
   }
 
   // Initialization

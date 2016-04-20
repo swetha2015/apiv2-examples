@@ -16,3 +16,11 @@ Start the example server on your machine by running `npm start` in this director
 
 Navigate to [http://localhost:8000/](http://localhost:8000) with your browser and play with the examples.
 
+
+Reusing the code
+----------------
+
+This example is a browser-based application using the AngularJS framework. If you want to use a different framework,
+you can retrieve the ScalrAPI service definition at the beginning of app.js, and the only thing you need to change is
+the `$http` call that performs the actual HTTP request in the `makeApiCall` function.
+

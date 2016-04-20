@@ -158,6 +158,34 @@
               </p>
             </div>
           </tab>
+
+          <tab heading="3. Create a Farm from nothing">
+            <h3>Example 3: Create a Farm from pieces</h3>
+            <p>This exemple will successively create an image in the specified environment, create a role using this image, create a farm, create a farm role using the previously created role and add it to the created farm.<br/>
+            Note: this requires that the environment you are using has access to Amazon EC2 credentials.</p>
+            <form name="callForm3" class="form-horizontal">
+              <div class="form-group">
+                <label class="col-sm-2 control-label">Environment ID:</label>
+                <div class="col-sm-10">
+                  <input class="form-control" type="text" name="envID3" ng-model="params3.envID" ng-required="true"/>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">Cleanup:</label>
+                <div class="col-sm-10">
+                  <input class="form-control" type="checkbox" name="cleanup3" ng-model="params3.cleanup" checked/>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                  <button class="btn btn-success" ng-click="startCreateFarm()">Run example</button>
+                </div>
+              </div>
+            </form>
+            <div class="col-sm-offset-1 col-sm-10">
+              <h4>Results</h4>
+              <pre><code>{{ result3 }}</code></pre>
+            </div>
         </tabset>
     </div>
   </div>
