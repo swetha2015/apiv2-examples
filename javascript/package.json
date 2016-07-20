@@ -1,0 +1,13 @@
+{
+  "name": "scalr-api-demo-client",
+  "private": true,
+  "version": "0.0.1",
+  "description": "An very simple test client for Scalr's API",
+  "devDependencies": {
+    "http-server": "^0.6.1"
+  },
+  "scripts": {
+    "prestart": "npm install",
+    "start": "http-server -a 127.0.0.1 -p 8000 -c-1"
+  }
+}

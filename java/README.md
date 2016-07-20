@@ -1,3 +1,9 @@
+Scalr APIV2 Java Sample
+=======================
+
+Usage
+-----
+
 1. Rename config file
 ```
 mv config.defaults.json config.json

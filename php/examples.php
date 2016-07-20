@@ -11,16 +11,18 @@ $config = json_decode($creds);
 $scalr = new ScalrAPI($config->api_url, $config->api_key_id, $config->api_key_secret);
 
 // LIST OPERATING SYSTEMS
+$url = '/api/v1beta0/account/os/?family=ubuntu';
 try {
-	$list = $scalr->scroll('/api/v1beta0/account/os/?family=ubuntu');
+	print("Accessing " . $url . "\n");
+	$list = $scalr->scroll($url);
+	print("Results:\n");
+	print_r($list);
 } catch (Exception $e) {
+	print("Error accessing API");
 	print_r($e);
 	print_r($scalr->errors);
 	exit;
 }
-
-print_r($list);
-
 
 /*
 
