@@ -1,5 +1,5 @@
-Scalr APIv2 Sample clients
-==========================
+Scalr APIv2 Example clients
+===========================
 
 This repository contains examples how to use the Scalr APIv2 with different programming languages.
 
