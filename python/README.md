@@ -15,7 +15,7 @@ Using this sample
 Scenarii
 --------
 
-Two sample scenraii are included:
+Two sample scenarii are included:
 
   + `list` calls the Scalr API to list Roles, Images, Role Categories, and OSes.
   + `create` creates an Image and a Role, associates the Image with the Role, and then cleans up by undoing everything
